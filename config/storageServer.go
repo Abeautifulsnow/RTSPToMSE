@@ -1,8 +1,12 @@
 package config
 
 import (
+	"encoding/json"
+	"os"
 	"path/filepath"
 
+	"github.com/hashicorp/go-version"
+	"github.com/liip/sheriff"
 	"github.com/sirupsen/logrus"
 )
 
@@ -10,6 +14,39 @@ var (
 	//Default www static file dir
 	DefaultHTTPDir = "web"
 )
+
+// ClientDelete Delete Client
+func (obj *StorageST) SaveConfig() error {
+	Log.WithFields(logrus.Fields{
+		"module": "config",
+		"func":   "NewStreamCore",
+	}).Debugln("Saving configuration to", ConfigFile)
+	v2, err := version.NewVersion("2.0.0")
+	if err != nil {
+		return err
+	}
+	data, err := sheriff.Marshal(&sheriff.Options{
+		Groups:     []string{"config"},
+		ApiVersion: v2,
+	}, obj)
+	if err != nil {
+		return err
+	}
+	res, err := json.MarshalIndent(data, "", "  ")
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(ConfigFile, res, 0644)
+	if err != nil {
+		Log.WithFields(logrus.Fields{
+			"module": "config",
+			"func":   "SaveConfig",
+			"call":   "WriteFile",
+		}).Errorln(err.Error())
+		return err
+	}
+	return nil
+}
 
 // ServerHTTPDir
 func (obj *StorageST) ServerHTTPDir() string {
