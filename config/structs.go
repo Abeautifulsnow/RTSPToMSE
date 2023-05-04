@@ -102,6 +102,7 @@ type ChannelST struct {
 	hlsSegmentNumber   int
 	clients            map[string]ClientST
 	ack                time.Time
+	hlsMuxer           *MuxerHLS `json:"-"`
 }
 
 // ClientST client storage section

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Abeautifulsnow/RTSPToMSE/utils"
 	"github.com/deepch/vdk/format/rtmp"
 
 	"github.com/deepch/vdk/av"
@@ -23,7 +24,7 @@ func StreamServerRunStreamDo(streamID string, channelID string) {
 		}
 	}()
 	for {
-		baseLogger := log.WithFields(logrus.Fields{
+		baseLogger := Log.WithFields(logrus.Fields{
 			"module":  "core",
 			"stream":  streamID,
 			"channel": channelID,
@@ -52,7 +53,7 @@ func StreamServerRunStreamDo(streamID string, channelID string) {
 			return
 		}
 		if err != nil {
-			log.WithFields(logrus.Fields{
+			Log.WithFields(logrus.Fields{
 				"call": "Restart",
 			}).Errorln("Stream error restart stream", err)
 		}
@@ -93,7 +94,7 @@ func StreamServerRunStream(streamID string, channelID string, opt *ChannelST) (i
 			Storage.StreamChannelCodecsUpdate(streamID, channelID, RTSPClient.CodecData, RTSPClient.SDPRaw)
 		}
 	}
-	log.WithFields(logrus.Fields{
+	Log.WithFields(logrus.Fields{
 		"module":  "core",
 		"stream":  streamID,
 		"channel": channelID,
@@ -119,11 +120,11 @@ func StreamServerRunStream(streamID string, channelID string, opt *ChannelST) (i
 		//Read core signals
 		case signals := <-opt.signals:
 			switch signals {
-			case SignalStreamStop:
+			case utils.SignalStreamStop:
 				return 2, ErrorStreamStopCoreSignal
-			case SignalStreamRestart:
+			case utils.SignalStreamRestart:
 				return 0, ErrorStreamRestart
-			case SignalStreamClient:
+			case utils.SignalStreamClient:
 				return 1, ErrorStreamNoClients
 			}
 		//Read rtsp signals
@@ -212,7 +213,7 @@ func StreamServerRunStreamRTMP(streamID string, channelID string, opt *ChannelST
 	preDur := make([]time.Duration, len(codecs))
 	Storage.StreamChannelCodecsUpdate(streamID, channelID, codecs, []byte{})
 
-	log.WithFields(logrus.Fields{
+	Log.WithFields(logrus.Fields{
 		"module":  "core",
 		"stream":  streamID,
 		"channel": channelID,
@@ -250,11 +251,11 @@ func StreamServerRunStreamRTMP(streamID string, channelID string, opt *ChannelST
 		//Read core signals
 		case signals := <-opt.signals:
 			switch signals {
-			case SignalStreamStop:
+			case utils.SignalStreamStop:
 				return 2, ErrorStreamStopCoreSignal
-			case SignalStreamRestart:
+			case utils.SignalStreamRestart:
 				return 0, ErrorStreamRestart
-			case SignalStreamClient:
+			case utils.SignalStreamClient:
 				return 1, ErrorStreamNoClients
 			}
 		//Read rtsp signals

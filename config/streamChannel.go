@@ -3,6 +3,7 @@ package config
 import (
 	"time"
 
+	"github.com/Abeautifulsnow/RTSPToMSE/utils"
 	"github.com/deepch/vdk/av"
 	"github.com/imdario/mergo"
 	"github.com/sirupsen/logrus"
@@ -109,7 +110,7 @@ func (obj *StorageST) StreamChannelReload(uuid string, channelID string) error {
 	defer obj.mutex.RUnlock()
 	if tmp, ok := obj.Streams[uuid]; ok {
 		if channelTmp, ok := tmp.Channels[channelID]; ok {
-			channelTmp.signals <- SignalStreamRestart
+			channelTmp.signals <- utils.SignalStreamRestart
 			return nil
 		}
 	}
@@ -181,7 +182,7 @@ func (obj *StorageST) StreamChannelCast(key string, channelID string, val *av.Pa
 					if len(i2.outgoingAVPacket) < 1000 {
 						i2.outgoingAVPacket <- val
 					} else if len(i2.signals) < 10 {
-						i2.signals <- SignalStreamStop
+						i2.signals <- utils.SignalStreamStop
 					}
 				}
 				channelTmp.ack = time.Now()
@@ -206,7 +207,7 @@ func (obj *StorageST) StreamChannelCastProxy(key string, channelID string, val *
 					if len(i2.outgoingRTPPacket) < 1000 {
 						i2.outgoingRTPPacket <- val
 					} else if len(i2.signals) < 10 {
-						i2.signals <- SignalStreamStop
+						i2.signals <- utils.SignalStreamStop
 					}
 				}
 				channelTmp.ack = time.Now()
@@ -283,7 +284,7 @@ func (obj *StorageST) StreamChannelEdit(uuid string, channelID string, val Chann
 	if tmp, ok := obj.Streams[uuid]; ok {
 		if currentChannel, ok := tmp.Channels[channelID]; ok {
 			if currentChannel.runLock {
-				currentChannel.signals <- SignalStreamStop
+				currentChannel.signals <- utils.SignalStreamStop
 			}
 			val = obj.StreamChannelMake(val)
 			obj.Streams[uuid].Channels[channelID] = val
@@ -308,7 +309,7 @@ func (obj *StorageST) StreamChannelDelete(uuid string, channelID string) error {
 	if tmp, ok := obj.Streams[uuid]; ok {
 		if channelTmp, ok := tmp.Channels[channelID]; ok {
 			if channelTmp.runLock {
-				channelTmp.signals <- SignalStreamStop
+				channelTmp.signals <- utils.SignalStreamStop
 			}
 			delete(obj.Streams[uuid].Channels, channelID)
 			err := obj.SaveConfig()

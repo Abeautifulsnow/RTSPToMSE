@@ -3,8 +3,11 @@ package config
 import (
 	"encoding/json"
 	"flag"
+	"fmt"
 	"io"
 	"os"
+	"path"
+	"runtime"
 	"time"
 
 	"github.com/imdario/mergo"
@@ -23,8 +26,18 @@ func init() {
 	if !Debug {
 		Log.SetOutput(io.Discard)
 	}
+
+	// Enable output log content containing line number.
+	Log.SetReportCaller(true)
 	Log.SetFormatter(&logrus.TextFormatter{
-		FullTimestamp: true,
+		ForceColors:     true,
+		FullTimestamp:   true,
+		DisableColors:   false,
+		TimestampFormat: "2006-01-02 15:04:05",
+		CallerPrettyfier: func(f *runtime.Frame) (function string, file string) {
+			filename := path.Base(f.File)
+			return fmt.Sprintf("%s()", f.Function), fmt.Sprintf("%s:%d", filename, f.Line)
+		},
 	})
 	Log.SetLevel(Storage.ServerLogLevel())
 }

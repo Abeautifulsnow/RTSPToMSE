@@ -45,19 +45,9 @@ func HTTPAPIServer() {
 	*/
 
 	if config.Storage.ServerHTTPDemo() {
-		public.LoadHTMLGlob(config.Storage.ServerHTTPDir() + "/templates/*")
-		public.GET("/", HTTPAPIServerIndex)
 		public.GET("/pages/stream/list", HTTPAPIStreamList)
-		public.GET("/pages/stream/add", HTTPAPIAddStream)
-		public.GET("/pages/stream/edit/:uuid", HTTPAPIEditStream)
 		public.GET("/pages/player/hls/:uuid/:channel", HTTPAPIPlayHls)
 		public.GET("/pages/player/mse/:uuid/:channel", HTTPAPIPlayMse)
-		public.GET("/pages/player/webrtc/:uuid/:channel", HTTPAPIPlayWebrtc)
-		public.GET("/pages/multiview", HTTPAPIMultiview)
-		public.Any("/pages/multiview/full", HTTPAPIFullScreenMultiView)
-		public.GET("/pages/documentation", HTTPAPIServerDocumentation)
-		public.GET("/pages/player/all/:uuid/:channel", HTTPAPIPlayAll)
-		public.StaticFS("/static", http.Dir(config.Storage.ServerHTTPDir()+"/static"))
 	}
 
 	/*
@@ -72,42 +62,15 @@ func HTTPAPIServer() {
 	privat.GET("/stream/:uuid/info", HTTPAPIServerStreamInfo)
 
 	/*
-		Streams Multi Control elements
-	*/
-
-	privat.POST("/streams/multi/control/add", HTTPAPIServerStreamsMultiControlAdd)
-	privat.POST("/streams/multi/control/delete", HTTPAPIServerStreamsMultiControlDelete)
-
-	/*
 		Stream Channel elements
 	*/
 
-	privat.POST("/stream/:uuid/channel/:channel/add", HTTPAPIServerStreamChannelAdd)
-	privat.POST("/stream/:uuid/channel/:channel/edit", HTTPAPIServerStreamChannelEdit)
-	privat.GET("/stream/:uuid/channel/:channel/delete", HTTPAPIServerStreamChannelDelete)
 	privat.GET("/stream/:uuid/channel/:channel/codec", HTTPAPIServerStreamChannelCodec)
 	privat.GET("/stream/:uuid/channel/:channel/reload", HTTPAPIServerStreamChannelReload)
 	privat.GET("/stream/:uuid/channel/:channel/info", HTTPAPIServerStreamChannelInfo)
 
-	/*
-		Stream video elements
-	*/
-	//HLS
-	public.GET("/stream/:uuid/channel/:channel/hls/live/index.m3u8", HTTPAPIServerStreamHLSM3U8)
-	public.GET("/stream/:uuid/channel/:channel/hls/live/segment/:seq/file.ts", HTTPAPIServerStreamHLSTS)
-	//HLS remote record
-	//public.GET("/stream/:uuid/channel/:channel/hls/rr/:s/:e/index.m3u8", HTTPAPIServerStreamRRM3U8)
-	//public.GET("/stream/:uuid/channel/:channel/hls/rr/:s/:e/:seq/file.ts", HTTPAPIServerStreamRRTS)
-	//HLS LL
-	public.GET("/stream/:uuid/channel/:channel/hlsll/live/index.m3u8", HTTPAPIServerStreamHLSLLM3U8)
-	public.GET("/stream/:uuid/channel/:channel/hlsll/live/init.mp4", HTTPAPIServerStreamHLSLLInit)
-	public.GET("/stream/:uuid/channel/:channel/hlsll/live/segment/:segment/:any", HTTPAPIServerStreamHLSLLM4Segment)
-	public.GET("/stream/:uuid/channel/:channel/hlsll/live/fragment/:segment/:fragment/:any", HTTPAPIServerStreamHLSLLM4Fragment)
 	//MSE
 	public.GET("/stream/:uuid/channel/:channel/mse", HTTPAPIServerStreamMSE)
-	public.POST("/stream/:uuid/channel/:channel/webrtc", HTTPAPIServerStreamWebRTC)
-	//Save fragment to mp4
-	public.GET("/stream/:uuid/channel/:channel/save/mp4/fragment/:duration", HTTPAPIServerStreamSaveToMP4)
 	/*
 		HTTPS Mode Cert
 		# Key considerations for algorithm "RSA" ≥ 2048-bit
@@ -154,28 +117,8 @@ func HTTPAPIServer() {
 
 }
 
-// HTTPAPIServerIndex index file
-func HTTPAPIServerIndex(c *gin.Context) {
-	c.HTML(http.StatusOK, "index.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "index",
-	})
-
-}
-
-func HTTPAPIServerDocumentation(c *gin.Context) {
-	c.HTML(http.StatusOK, "documentation.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "documentation",
-	})
-}
-
 func HTTPAPIStreamList(c *gin.Context) {
-	c.HTML(http.StatusOK, "stream_list.tmpl", gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"port":    config.Storage.ServerHTTPPort(),
 		"streams": config.Storage.Streams,
 		"version": time.Now().String(),
@@ -184,7 +127,7 @@ func HTTPAPIStreamList(c *gin.Context) {
 }
 
 func HTTPAPIPlayHls(c *gin.Context) {
-	c.HTML(http.StatusOK, "play_hls.tmpl", gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"port":    config.Storage.ServerHTTPPort(),
 		"streams": config.Storage.Streams,
 		"version": time.Now().String(),
@@ -194,58 +137,11 @@ func HTTPAPIPlayHls(c *gin.Context) {
 	})
 }
 func HTTPAPIPlayMse(c *gin.Context) {
-	c.HTML(http.StatusOK, "play_mse.tmpl", gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"port":    config.Storage.ServerHTTPPort(),
 		"streams": config.Storage.Streams,
 		"version": time.Now().String(),
 		"page":    "play_mse",
-		"uuid":    c.Param("uuid"),
-		"channel": c.Param("channel"),
-	})
-}
-func HTTPAPIPlayWebrtc(c *gin.Context) {
-	c.HTML(http.StatusOK, "play_webrtc.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "play_webrtc",
-		"uuid":    c.Param("uuid"),
-		"channel": c.Param("channel"),
-	})
-}
-func HTTPAPIAddStream(c *gin.Context) {
-	c.HTML(http.StatusOK, "add_stream.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "add_stream",
-	})
-}
-func HTTPAPIEditStream(c *gin.Context) {
-	c.HTML(http.StatusOK, "edit_stream.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "edit_stream",
-		"uuid":    c.Param("uuid"),
-	})
-}
-
-func HTTPAPIMultiview(c *gin.Context) {
-	c.HTML(http.StatusOK, "multiview.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "multiview",
-	})
-}
-
-func HTTPAPIPlayAll(c *gin.Context) {
-	c.HTML(http.StatusOK, "play_all.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "play_all",
 		"uuid":    c.Param("uuid"),
 		"channel": c.Param("channel"),
 	})
@@ -259,31 +155,6 @@ type MultiViewOptionsGrid struct {
 	UUID       string `json:"uuid"`
 	Channel    int    `json:"channel"`
 	PlayerType string `json:"playerType"`
-}
-
-func HTTPAPIFullScreenMultiView(c *gin.Context) {
-	var createParams MultiViewOptions
-	err := c.ShouldBindJSON(&createParams)
-	if err != nil {
-		config.Log.WithFields(logrus.Fields{
-			"module": "http_page",
-			"func":   "HTTPAPIFullScreenMultiView",
-			"call":   "BindJSON",
-		}).Errorln(err.Error())
-	}
-	config.Log.WithFields(logrus.Fields{
-		"module": "http_page",
-		"func":   "HTTPAPIFullScreenMultiView",
-		"call":   "Options",
-	}).Debugln(createParams)
-	c.HTML(http.StatusOK, "fullscreenmulti.tmpl", gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"options": createParams,
-		"page":    "fullscreenmulti",
-		"query":   c.Request.URL.Query(),
-	})
 }
 
 // CrossOrigin Access-Control-Allow-Origin any methods

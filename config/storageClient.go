@@ -3,6 +3,7 @@ package config
 import (
 	"time"
 
+	"github.com/Abeautifulsnow/RTSPToMSE/utils"
 	"github.com/deepch/vdk/av"
 )
 
@@ -15,7 +16,7 @@ func (obj *StorageST) ClientAdd(streamID string, channelID string, mode int) (st
 		return "", nil, nil, ErrorStreamNotFound
 	}
 	//Generate UUID client
-	cid, err := generateUUID()
+	cid, err := utils.GenerateUUID()
 	if err != nil {
 		return "", nil, nil, err
 	}

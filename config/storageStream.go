@@ -1,8 +1,11 @@
 package config
 
-import "github.com/liip/sheriff"
+import (
+	"github.com/Abeautifulsnow/RTSPToMSE/utils"
+	"github.com/liip/sheriff"
+)
 
-//MarshalledStreamsList lists all streams and includes only fields which are safe to serialize.
+// MarshalledStreamsList lists all streams and includes only fields which are safe to serialize.
 func (obj *StorageST) MarshalledStreamsList() (interface{}, error) {
 	obj.mutex.RLock()
 	defer obj.mutex.RUnlock()
@@ -15,7 +18,7 @@ func (obj *StorageST) MarshalledStreamsList() (interface{}, error) {
 	return val, nil
 }
 
-//StreamAdd add stream
+// StreamAdd add stream
 func (obj *StorageST) StreamAdd(uuid string, val StreamST) error {
 	obj.mutex.Lock()
 	defer obj.mutex.Unlock()
@@ -49,7 +52,7 @@ func (obj *StorageST) StreamAdd(uuid string, val StreamST) error {
 	return nil
 }
 
-//StreamEdit edit stream
+// StreamEdit edit stream
 func (obj *StorageST) StreamEdit(uuid string, val StreamST) error {
 	obj.mutex.Lock()
 	defer obj.mutex.Unlock()
@@ -58,7 +61,7 @@ func (obj *StorageST) StreamEdit(uuid string, val StreamST) error {
 			if i2.runLock {
 				tmp.Channels[i] = i2
 				obj.Streams[uuid] = tmp
-				i2.signals <- SignalStreamStop
+				i2.signals <- utils.SignalStreamStop
 			}
 		}
 		for i3, i4 := range val.Channels {
@@ -81,27 +84,27 @@ func (obj *StorageST) StreamEdit(uuid string, val StreamST) error {
 	return ErrorStreamNotFound
 }
 
-//StreamReload reload stream
+// StreamReload reload stream
 func (obj *StorageST) StopAll() {
 	obj.mutex.RLock()
 	defer obj.mutex.RUnlock()
 	for _, st := range obj.Streams {
 		for _, i2 := range st.Channels {
 			if i2.runLock {
-				i2.signals <- SignalStreamStop
+				i2.signals <- utils.SignalStreamStop
 			}
 		}
 	}
 }
 
-//StreamReload reload stream
+// StreamReload reload stream
 func (obj *StorageST) StreamReload(uuid string) error {
 	obj.mutex.RLock()
 	defer obj.mutex.RUnlock()
 	if tmp, ok := obj.Streams[uuid]; ok {
 		for _, i2 := range tmp.Channels {
 			if i2.runLock {
-				i2.signals <- SignalStreamRestart
+				i2.signals <- utils.SignalStreamRestart
 			}
 		}
 		return nil
@@ -109,14 +112,14 @@ func (obj *StorageST) StreamReload(uuid string) error {
 	return ErrorStreamNotFound
 }
 
-//StreamDelete stream
+// StreamDelete stream
 func (obj *StorageST) StreamDelete(uuid string) error {
 	obj.mutex.Lock()
 	defer obj.mutex.Unlock()
 	if tmp, ok := obj.Streams[uuid]; ok {
 		for _, i2 := range tmp.Channels {
 			if i2.runLock {
-				i2.signals <- SignalStreamStop
+				i2.signals <- utils.SignalStreamStop
 			}
 		}
 		delete(obj.Streams, uuid)
@@ -129,7 +132,7 @@ func (obj *StorageST) StreamDelete(uuid string) error {
 	return ErrorStreamNotFound
 }
 
-//StreamInfo return stream info
+// StreamInfo return stream info
 func (obj *StorageST) StreamInfo(uuid string) (*StreamST, error) {
 	obj.mutex.RLock()
 	defer obj.mutex.RUnlock()
