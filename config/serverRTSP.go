@@ -170,7 +170,7 @@ func RTSPServer() {
 // RTSPServerClientHandle func
 func RTSPServerClientHandle(conn net.Conn) {
 	buf := make([]byte, 4096)
-	token, uuid, channel, in, cSEQ := "", "", "0", 0, 0
+	_, uuid, channel, in, cSEQ := "", "", "0", 0, 0
 	var playStarted bool
 	defer func() {
 		err := conn.Close()
@@ -247,7 +247,7 @@ func RTSPServerClientHandle(conn net.Conn) {
 				}
 				continue
 			}
-			uuid, channel, token, err = parseStreamChannel(buf[:n])
+			uuid, channel, _, err = parseStreamChannel(buf[:n])
 			if err != nil {
 				Log.WithFields(logrus.Fields{
 					"module":  "rtsp_server",
@@ -267,21 +267,6 @@ func RTSPServerClientHandle(conn net.Conn) {
 					"call":    "StreamChannelExist",
 				}).Errorln(ErrorStreamNotFound.Error())
 				err = RTSPServerClientResponse(uuid, channel, conn, 404, map[string]string{"CSeq": strconv.Itoa(cSEQ)})
-				if err != nil {
-					return
-				}
-				return
-			}
-
-			if !RemoteAuthorization("RTSP", uuid, channel, token, conn.RemoteAddr().String()) {
-				Log.WithFields(logrus.Fields{
-					"module":  "rtsp_server",
-					"stream":  uuid,
-					"channel": channel,
-					"func":    "handleRTSPServerRequest",
-					"call":    "StreamChannelExist",
-				}).Errorln(ErrorStreamUnauthorized.Error())
-				err = RTSPServerClientResponse(uuid, channel, conn, 401, map[string]string{"CSeq": strconv.Itoa(cSEQ)})
 				if err != nil {
 					return
 				}
@@ -416,7 +401,7 @@ func RTSPServerClientResponse(uuid string, channel string, conn net.Conn, status
 		}
 		builder.WriteString(fmt.Sprintf("%s: %s\r\n", k, v))
 	}
-	builder.WriteString(fmt.Sprintf("\r\n"))
+	builder.WriteString("\r\n")
 	builder.WriteString(sdp)
 	Log.WithFields(logrus.Fields{
 		"module":  "rtsp_server",

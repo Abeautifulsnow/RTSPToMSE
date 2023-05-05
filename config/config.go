@@ -45,7 +45,7 @@ func init() {
 // NewStreamCore do load config file
 func NewStreamCore() *StorageST {
 	flag.BoolVar(&Debug, "Debug", true, "set Debug mode")
-	flag.StringVar(&ConfigFile, "config", "config.json", "config patch (/etc/server/config.json or config.json)")
+	flag.StringVar(&ConfigFile, "config", "C:\\personal_folder\\data\\dev\\git\\RTSPToMSE\\config\\config.json", "config patch (/etc/server/config.json or config.json)")
 	flag.Parse()
 
 	var tmp StorageST

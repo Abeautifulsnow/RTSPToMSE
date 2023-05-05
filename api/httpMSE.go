@@ -42,13 +42,6 @@ func HTTPAPIServerStreamMSE(c *gin.Context) {
 		return
 	}
 
-	if !config.RemoteAuthorization("WS", c.Param("uuid"), c.Param("channel"), c.Query("token"), c.ClientIP()) {
-		requestLogger.WithFields(logrus.Fields{
-			"call": "RemoteAuthorization",
-		}).Errorln(config.ErrorStreamUnauthorized.Error())
-		return
-	}
-
 	config.Storage.StreamChannelRun(c.Param("uuid"), c.Param("channel"))
 	err = conn.SetWriteDeadline(time.Now().Add(5 * time.Second))
 	if err != nil {

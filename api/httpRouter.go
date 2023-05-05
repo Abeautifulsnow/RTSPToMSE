@@ -34,42 +34,8 @@ func HTTPAPIServer() {
 	}
 
 	public.Use(CrossOrigin())
-	//Add private login password protect methods
-	privat := public.Group("/")
-	if config.Storage.ServerHTTPLogin() != "" && config.Storage.ServerHTTPPassword() != "" {
-		privat.Use(gin.BasicAuth(gin.Accounts{config.Storage.ServerHTTPLogin(): config.Storage.ServerHTTPPassword()}))
-	}
-
-	/*
-		Static HTML Files Demo Mode
-	*/
-
-	if config.Storage.ServerHTTPDemo() {
-		public.GET("/pages/stream/list", HTTPAPIStreamList)
-		public.GET("/pages/player/hls/:uuid/:channel", HTTPAPIPlayHls)
-		public.GET("/pages/player/mse/:uuid/:channel", HTTPAPIPlayMse)
-	}
-
-	/*
-		Stream Control elements
-	*/
-
-	privat.GET("/streams", HTTPAPIServerStreams)
-	privat.POST("/stream/:uuid/add", HTTPAPIServerStreamAdd)
-	privat.POST("/stream/:uuid/edit", HTTPAPIServerStreamEdit)
-	privat.GET("/stream/:uuid/delete", HTTPAPIServerStreamDelete)
-	privat.GET("/stream/:uuid/reload", HTTPAPIServerStreamReload)
-	privat.GET("/stream/:uuid/info", HTTPAPIServerStreamInfo)
-
-	/*
-		Stream Channel elements
-	*/
-
-	privat.GET("/stream/:uuid/channel/:channel/codec", HTTPAPIServerStreamChannelCodec)
-	privat.GET("/stream/:uuid/channel/:channel/reload", HTTPAPIServerStreamChannelReload)
-	privat.GET("/stream/:uuid/channel/:channel/info", HTTPAPIServerStreamChannelInfo)
-
 	//MSE
+	public.GET("/pages/stream/list", HTTPAPIStreamList)
 	public.GET("/stream/:uuid/channel/:channel/mse", HTTPAPIServerStreamMSE)
 	/*
 		HTTPS Mode Cert
@@ -123,27 +89,6 @@ func HTTPAPIStreamList(c *gin.Context) {
 		"streams": config.Storage.Streams,
 		"version": time.Now().String(),
 		"page":    "stream_list",
-	})
-}
-
-func HTTPAPIPlayHls(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "play_hls",
-		"uuid":    c.Param("uuid"),
-		"channel": c.Param("channel"),
-	})
-}
-func HTTPAPIPlayMse(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"port":    config.Storage.ServerHTTPPort(),
-		"streams": config.Storage.Streams,
-		"version": time.Now().String(),
-		"page":    "play_mse",
-		"uuid":    c.Param("uuid"),
-		"channel": c.Param("channel"),
 	})
 }
 

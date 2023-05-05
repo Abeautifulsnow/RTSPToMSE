@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"net"
 	"sync"
 	"time"
 
@@ -55,8 +54,6 @@ type ServerST struct {
 	LogLevel           logrus.Level `json:"log_level" groups:"api,config"`
 	HTTPDemo           bool         `json:"http_demo" groups:"api,config"`
 	HTTPDebug          bool         `json:"http_debug" groups:"api,config"`
-	HTTPLogin          string       `json:"http_login" groups:"api,config"`
-	HTTPPassword       string       `json:"http_password" groups:"api,config"`
 	HTTPDir            string       `json:"http_dir" groups:"api,config"`
 	HTTPPort           string       `json:"http_port" groups:"api,config"`
 	RTSPPort           string       `json:"rtsp_port" groups:"api,config"`
@@ -69,15 +66,6 @@ type ServerST struct {
 	ICEServers         []string     `json:"ice_servers" groups:"api,config"`
 	ICEUsername        string       `json:"ice_username" groups:"api,config"`
 	ICECredential      string       `json:"ice_credential" groups:"api,config"`
-	Token              Token        `json:"token,omitempty" groups:"api,config"`
-	WebRTCPortMin      uint16       `json:"webrtc_port_min" groups:"api,config"`
-	WebRTCPortMax      uint16       `json:"webrtc_port_max" groups:"api,config"`
-}
-
-// Token auth
-type Token struct {
-	Enable  bool   `json:"enable" groups:"api,config"`
-	Backend string `json:"backend" groups:"api,config"`
 }
 
 // ServerST stream storage section
@@ -111,7 +99,6 @@ type ClientST struct {
 	signals           chan int
 	outgoingAVPacket  chan *av.Packet
 	outgoingRTPPacket chan *[]byte
-	socket            net.Conn
 }
 
 // SegmentOld HLS cache section

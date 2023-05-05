@@ -5,8 +5,6 @@
         "http_debug": true,
         "http_demo": true,
         "http_dir": "web",
-        "http_login": "demo",
-        "http_password": "demo",
         "http_port": ":8083",
         "https": true,
         "https_auto_tls": false,
@@ -20,13 +18,7 @@
         ],
         "ice_username": "",
         "log_level": "debug",
-        "rtsp_port": ":5541",
-        "token": {
-            "backend": "http://127.0.0.1/test.php",
-            "enable": false
-        },
-        "webrtc_port_max": 0,
-        "webrtc_port_min": 0
+        "rtsp_port": ":554"
     },
     "streams": {
         "27aec28e-6181-4753-9acd-0456a75f0289": {
