@@ -52,7 +52,6 @@ type StorageST struct {
 type ServerST struct {
 	Debug              bool         `json:"debug" groups:"api,config"`
 	LogLevel           logrus.Level `json:"log_level" groups:"api,config"`
-	HTTPDemo           bool         `json:"http_demo" groups:"api,config"`
 	HTTPDebug          bool         `json:"http_debug" groups:"api,config"`
 	HTTPDir            string       `json:"http_dir" groups:"api,config"`
 	HTTPPort           string       `json:"http_port" groups:"api,config"`

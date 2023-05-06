@@ -35,8 +35,9 @@ func HTTPAPIServer() {
 
 	public.Use(CrossOrigin())
 	//MSE
-	public.GET("/pages/stream/list", HTTPAPIStreamList)
+	public.GET("/streams", HTTPAPIStreamList)
 	public.GET("/stream/:uuid/channel/:channel/mse", HTTPAPIServerStreamMSE)
+	public.GET("/stream/:uuid/channel/:channel/reload", HTTPAPIServerStreamChannelReload)
 	/*
 		HTTPS Mode Cert
 		# Key considerations for algorithm "RSA" ≥ 2048-bit
