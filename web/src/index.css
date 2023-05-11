@@ -28,7 +28,13 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100%;
+  width: 100%;
+}
+
+body > div#root {
+  width: 100%;
+  height: 100%;
 }
 
 h1 {

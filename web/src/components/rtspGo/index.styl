@@ -1,3 +1,29 @@
-#videoplayer {
-    width: 80%    
-}
+.video-item
+    display: flex
+    align-items: center
+    justify-content: center
+    flex-direction: column
+
+    .video
+        display: flex
+        align-items: center
+        justify-content: center
+        position: relative
+
+        .no-data
+            position: absolute
+            width: 80%
+            height: 100%
+            pointer-events: none;
+            background: black
+            // background-size: cover;
+
+            img
+                width: 100%
+                height: 100%
+
+        #videoplayer
+            width: 80%  
+
+        .video-name
+            display: block

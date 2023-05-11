@@ -1,6 +1,8 @@
-import { Divider } from 'antd'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './index.styl'
+import { infoType } from '@/interface'
+import LoaderSvg from '@/assets/loader.svg'
+import BackJPG from '@/assets/back.jpg'
 
 function Utf8ArrayToStr(array: Uint8Array) {
   let out, i, c
@@ -30,8 +32,15 @@ function Utf8ArrayToStr(array: Uint8Array) {
   return out
 }
 
-export default function GoRTSPComponent(props: any) {
+interface PropsType {
+  infos: infoType
+}
+
+export default function GoRTSPComponent(props: PropsType) {
+  const { infos } = props
+
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [ifLoaded, setIfLoaded] = useState(false)
 
   let mseSourceBuffer: SourceBuffer,
     mseStreamingStarted = false,
@@ -78,11 +87,15 @@ export default function GoRTSPComponent(props: any) {
     }
   }
 
-  const startPlay = () => {
+  const startPlay = (streamInfo: infoType) => {
     let protocol, port
     location.protocol == 'https:' ? (protocol = 'wss') : (protocol = 'ws')
     location.protocol == 'https:' ? (port = '8444') : (port = '8083')
-    const url = `${protocol}://${location.hostname}:${port}/stream/27aec28e-6181-4753-9acd-0456a75f0289/channel/0/mse`
+    const url = `${protocol}://${
+      location.hostname
+    }:${port}/stream/${streamInfo.get('uuid')}/channel/${streamInfo.get(
+      'channel',
+    )}/mse`
 
     const mse = new MediaSource()
     if (videoRef.current) {
@@ -128,13 +141,14 @@ export default function GoRTSPComponent(props: any) {
 
   useEffect(() => {
     if (videoRef.current) {
-      startPlay()
+      startPlay(infos)
     }
   }, [])
 
   useEffect(() => {
     if (videoRef.current) {
       videoRef.current.addEventListener('loadeddata', () => {
+        setIfLoaded(true)
         videoRef.current && videoRef.current.play()
       })
       //fix stalled video in safari
@@ -160,15 +174,25 @@ export default function GoRTSPComponent(props: any) {
 
   return (
     <>
-      <Divider>socket调用分割线</Divider>
-      <video
-        ref={videoRef}
-        id="videoplayer"
-        autoPlay
-        controls
-        playsInline
-        muted
-      ></video>
+      <div className="video-item">
+        <div className="video">
+          <video
+            ref={videoRef}
+            id="videoplayer"
+            autoPlay
+            controls
+            playsInline
+            muted
+          ></video>
+          <div
+            className="no-data"
+            // style={{ backgroundImage: 'url(' + BackJPG + ')' }}
+          >
+            {!ifLoaded && <img src={LoaderSvg}></img>}
+          </div>
+        </div>
+        <title className="video-name">{infos.get('name')}</title>
+      </div>
     </>
   )
 }
