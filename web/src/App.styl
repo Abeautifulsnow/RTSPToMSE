@@ -13,6 +13,16 @@
         flex-basis: 20%
         border-right: dashed #d6cfcf
 
+        .ant-btn.active
+            background: red
+
+        .ant-btn
+            &:focus
+                outline: none
+            
+            &:hover
+                border-color: unset
+
         .button-title
             display: block
         .button-row
@@ -20,12 +30,11 @@
             display: flex
             flex-direction: column
             row-gap: 10px
-    
+
     .video-area
         display: flex
         flex-direction: column
         align-items: center;
-        justify-content: space-between;
         height: 100%
         overflow: auto
         flex-basis: 80%

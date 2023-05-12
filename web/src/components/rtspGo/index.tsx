@@ -184,14 +184,15 @@ export default function GoRTSPComponent(props: PropsType) {
             playsInline
             muted
           ></video>
-          <div
-            className="no-data"
-            // style={{ backgroundImage: 'url(' + BackJPG + ')' }}
-          >
-            {!ifLoaded && <img src={LoaderSvg}></img>}
-          </div>
+          {!ifLoaded && (
+            <div
+              className="no-data"
+              // style={{ backgroundImage: 'url(' + BackJPG + ')' }}
+            >
+              <img src={LoaderSvg}></img>
+            </div>
+          )}
         </div>
-        <title className="video-name">{infos.get('name')}</title>
       </div>
     </>
   )

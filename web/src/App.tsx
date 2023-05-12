@@ -51,10 +51,10 @@ function App() {
       if (btn === 'All') {
         return (
           <>
-            {infos.map((item: any, idx: number): JSX.Element => {
+            {infos.map((item: infoType, idx: number): JSX.Element => {
               return (
                 <div key={idx} className="video">
-                  <Divider>socket调用分割线</Divider>
+                  <Divider>{item.get('name')}</Divider>
                   <GoRTSPComponent infos={item} key={idx} />
                 </div>
               )
@@ -83,6 +83,7 @@ function App() {
         <title className="button-title">按钮区</title>
         <Divider></Divider>
         <Button
+          className={button === 'All' ? 'active' : ''}
           type="primary"
           block
           style={{ width: '50%' }}
@@ -95,6 +96,7 @@ function App() {
           {names.map((name: string, idx: number) => {
             return (
               <Button
+                className={name === button ? 'active' : ''}
                 type="primary"
                 key={idx}
                 block
