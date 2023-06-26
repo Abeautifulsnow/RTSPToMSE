@@ -6,7 +6,7 @@
         "http_demo": true,
         "http_dir": "web",
         "http_port": ":8083",
-        "https": true,
+        "https": false,
         "https_auto_tls": false,
         "https_auto_tls_name": "",
         "https_cert": "ssl/server.cert",
@@ -25,7 +25,7 @@
             "channels": {
                 "0": {
                     "audio": true,
-                    "url": "rtsp://admin:zwsz1234@192.168.0.66:554/Streaming/Channels/101"
+                    "url": "rtsp://admin:zwsz1234@192.168.1.220:554/Streaming/Channels/101"
                 }
             },
             "name": "front"
@@ -33,7 +33,7 @@
         "f1b34501-3baa-45ce-8de7-ae3560aa8587": {
             "channels": {
                 "0": {
-                    "url": "rtsp://admin:zwsz1234@192.168.0.65:554/Streaming/Channels/101",
+                    "url": "rtsp://admin:zwsz1234@192.168.1.221:554/Streaming/Channels/101",
                     "debug": false,
                     "audio": true
                 }
@@ -43,7 +43,7 @@
         "23c612d2-b88c-46ff-ae82-b0d9998a9533": {
             "channels": {
                 "0": {
-                    "url": "rtsp://admin:zwsz1234@192.168.0.64:554/Streaming/Channels/101",
+                    "url": "rtsp://admin:zwsz1234@192.168.1.222:554/Streaming/Channels/101",
                     "debug": false,
                     "audio": true
                 }
@@ -53,7 +53,7 @@
         "7ede28d3-3787-4f9d-af77-7aa2469bb70c": {
             "channels": {
                 "0": {
-                    "url": "rtsp://admin:zwsz1234@192.168.0.63:554/Streaming/Channels/101",
+                    "url": "rtsp://admin:zwsz1234@192.168.1.223:554/Streaming/Channels/101",
                     "debug": false,
                     "audio": true
                 }

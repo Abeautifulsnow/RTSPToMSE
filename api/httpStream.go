@@ -10,17 +10,17 @@ import (
 func HTTPAPIServerStreams(c *gin.Context) {
 	list, err := config.Storage.MarshalledStreamsList()
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: list})
+	c.JSON(200, Message{Status: 1, Payload: list})
 }
 
 // HTTPAPIServerStreamDelete function reload stream
 func HTTPAPIServerStreamReload(c *gin.Context) {
 	err := config.Storage.StreamReload(c.Param("uuid"))
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		config.Log.WithFields(logrus.Fields{
 			"module": "http_stream",
 			"stream": c.Param("uuid"),
@@ -29,14 +29,14 @@ func HTTPAPIServerStreamReload(c *gin.Context) {
 		}).Errorln(err.Error())
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: config.Success})
+	c.JSON(200, Message{Status: 1, Payload: config.Success})
 }
 
 // HTTPAPIServerStreamInfo function return stream info struct
 func HTTPAPIServerStreamInfo(c *gin.Context) {
 	info, err := config.Storage.StreamInfo(c.Param("uuid"))
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		config.Log.WithFields(logrus.Fields{
 			"module": "http_stream",
 			"stream": c.Param("uuid"),
@@ -45,5 +45,5 @@ func HTTPAPIServerStreamInfo(c *gin.Context) {
 		}).Errorln(err.Error())
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: info})
+	c.JSON(200, Message{Status: 1, Payload: info})
 }

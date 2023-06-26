@@ -16,7 +16,7 @@ func HTTPAPIServerStreamChannelCodec(c *gin.Context) {
 	})
 
 	if !config.Storage.StreamChannelExist(c.Param("uuid"), c.Param("channel")) {
-		c.IndentedJSON(500, Message{Status: 0, Payload: config.ErrorStreamNotFound.Error()})
+		c.JSON(500, Message{Status: 0, Payload: config.ErrorStreamNotFound.Error()})
 		requestLogger.WithFields(logrus.Fields{
 			"call": "StreamChannelExist",
 		}).Errorln(config.ErrorStreamNotFound.Error())
@@ -24,20 +24,20 @@ func HTTPAPIServerStreamChannelCodec(c *gin.Context) {
 	}
 	codecs, err := config.Storage.StreamChannelCodecs(c.Param("uuid"), c.Param("channel"))
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		requestLogger.WithFields(logrus.Fields{
 			"call": "StreamChannelCodec",
 		}).Errorln(err.Error())
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: codecs})
+	c.JSON(200, Message{Status: 1, Payload: codecs})
 }
 
 // HTTPAPIServerStreamChannelInfo function return stream info struct
 func HTTPAPIServerStreamChannelInfo(c *gin.Context) {
 	info, err := config.Storage.StreamChannelInfo(c.Param("uuid"), c.Param("channel"))
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		config.Log.WithFields(logrus.Fields{
 			"module":  "http_stream",
 			"stream":  c.Param("uuid"),
@@ -47,14 +47,14 @@ func HTTPAPIServerStreamChannelInfo(c *gin.Context) {
 		}).Errorln(err.Error())
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: info})
+	c.JSON(200, Message{Status: 1, Payload: info})
 }
 
 // HTTPAPIServerStreamChannelReload function reload stream
 func HTTPAPIServerStreamChannelReload(c *gin.Context) {
 	err := config.Storage.StreamChannelReload(c.Param("uuid"), c.Param("channel"))
 	if err != nil {
-		c.IndentedJSON(500, Message{Status: 0, Payload: err.Error()})
+		c.JSON(500, Message{Status: 0, Payload: err.Error()})
 		config.Log.WithFields(logrus.Fields{
 			"module":  "http_stream",
 			"stream":  c.Param("uuid"),
@@ -64,5 +64,5 @@ func HTTPAPIServerStreamChannelReload(c *gin.Context) {
 		}).Errorln(err.Error())
 		return
 	}
-	c.IndentedJSON(200, Message{Status: 1, Payload: config.Success})
+	c.JSON(200, Message{Status: 1, Payload: config.Success})
 }
