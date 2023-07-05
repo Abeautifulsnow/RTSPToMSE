@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import './index.styl'
 import { infoType } from '@/interface'
 import LoaderSvg from '@/assets/loader.svg'
-import BackJPG from '@/assets/back.jpg'
 
 function Utf8ArrayToStr(array: Uint8Array) {
   let out, i, c
