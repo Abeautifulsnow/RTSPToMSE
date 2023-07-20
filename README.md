@@ -8,6 +8,7 @@ This is a Front-End separation project. Therefore you need to start service resp
 ### Go Service
 
 ```bash
+cd server
 # Download package
 go mod tidy
 

@@ -1,0 +1,40 @@
+version: "3"
+services:
+  backend:
+    image: RtspToMse/backend
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    volumes:
+      - config:/config
+    container_name: mse_backend
+    network_mode: "host"
+    expose:
+      - 8083
+    command: ["/app", "-config", "/config/config.json"]
+
+  frontend:
+    image: RtspToMse/frontend
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    depends_on:
+      backend:
+        condition: service_started
+
+    container_name: mse_frontend
+    ports:
+      - target: 80
+        host_ip: 127.0.0.1
+        published: "8081"
+        protocol: tcp
+        mode: host
+
+volumes:
+  config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ~/.config/rtsp/
+
