@@ -6,7 +6,7 @@
         "http_demo": true,
         "http_dir": "web",
         "http_port": ":8083",
-        "https": true,
+        "https": false,
         "https_auto_tls": false,
         "https_auto_tls_name": "",
         "https_cert": "ssl/server.cert",
