@@ -1,7 +1,7 @@
 version: "3"
 services:
   backend:
-    image: RtspToMse/backend
+    image: rtsptomse.backend
     build:
       context: ./server
       dockerfile: Dockerfile
@@ -11,10 +11,10 @@ services:
     network_mode: "host"
     expose:
       - 8083
-    command: ["/app", "-config", "/config/config.json"]
+    command: [ "/app", "-config", "/config/config.json" ]
 
   frontend:
-    image: RtspToMse/frontend
+    image: rtsptomse.frontend
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -36,5 +36,4 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: ~/.config/rtsp/
-
+      device: ./config

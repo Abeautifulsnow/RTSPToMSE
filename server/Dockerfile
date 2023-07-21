@@ -27,4 +27,3 @@ FROM scratch as deploy
 
 # 把编译环境中打包好的可执行文件和配置文件拷贝到当前镜像
 COPY --from=builder /build/app /
-COPY --from=builder /build/conf ./conf
