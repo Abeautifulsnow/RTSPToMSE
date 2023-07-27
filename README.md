@@ -1,7 +1,7 @@
 # RTSPToMSE
 RTSP Stream to WebBrowser. Which use [MediaSource](https://developer.mozilla.org/en-US/docs/Web/API/MediaSource) way to load the video stream for playback.
 
-## How to Use
+## Start service from the source code
 
 This is a Front-End separation project. Therefore you need to start service respectively.
 
@@ -31,7 +31,7 @@ pnpm run dev
 
 And then, you can visit it by http://localhost:5173/
 
-## Use Docker-compose
+## Use Docker-compose to start service
 
 - Step one - Build docker images manually
   - `docker compose -f Docker-compose.yml build`
@@ -39,3 +39,4 @@ And then, you can visit it by http://localhost:5173/
   - `docker compose -f Docker-compose.yml up -d`
 - Step three - Visit it on your browser
   - `http://localhost:8081`
+
