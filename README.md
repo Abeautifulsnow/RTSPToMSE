@@ -30,3 +30,12 @@ pnpm run dev
 ```
 
 And then, you can visit it by http://localhost:5173/
+
+## Use Docker-compose
+
+- Step one - Build docker images manually
+  - `docker compose -f Docker-compose.yml build`
+- Step two - Run these containers
+  - `docker compose -f Docker-compose.yml up -d`
+- Step three - Visit it on your browser
+  - `http://localhost:8081`
