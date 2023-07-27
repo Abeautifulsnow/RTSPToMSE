@@ -1,0 +1,64 @@
+{
+    "channel_defaults": {},
+    "server": {
+        "debug": true,
+        "http_debug": true,
+        "http_demo": true,
+        "http_dir": "web",
+        "http_port": ":8083",
+        "https": false,
+        "https_auto_tls": false,
+        "https_auto_tls_name": "",
+        "https_cert": "ssl/server.cert",
+        "https_key": "ssl/server.key",
+        "https_port": ":8444",
+        "ice_credential": "",
+        "ice_servers": [
+            "stun:stun.l.google.com:19302"
+        ],
+        "ice_username": "",
+        "log_level": "debug",
+        "rtsp_port": ":554"
+    },
+    "streams": {
+        "27aec28e-6181-4753-9acd-0456a75f0289": {
+            "channels": {
+                "0": {
+                    "audio": true,
+                    "url": "rtsp://admin:zwsz1234@192.168.0.66:554/Streaming/Channels/101"
+                }
+            },
+            "name": "front"
+        },
+        "f1b34501-3baa-45ce-8de7-ae3560aa8587": {
+            "channels": {
+                "0": {
+                    "url": "rtsp://admin:zwsz1234@192.168.0.65:554/Streaming/Channels/101",
+                    "debug": false,
+                    "audio": true
+                }
+            },
+            "name": "left"
+        },
+        "23c612d2-b88c-46ff-ae82-b0d9998a9533": {
+            "channels": {
+                "0": {
+                    "url": "rtsp://admin:zwsz1234@192.168.0.64:554/Streaming/Channels/101",
+                    "debug": false,
+                    "audio": true
+                }
+            },
+            "name": "right"
+        },
+        "7ede28d3-3787-4f9d-af77-7aa2469bb70c": {
+            "channels": {
+                "0": {
+                    "url": "rtsp://admin:zwsz1234@192.168.0.63:554/Streaming/Channels/101",
+                    "debug": false,
+                    "audio": true
+                }
+            },
+            "name": "back"
+        }
+    }
+}
